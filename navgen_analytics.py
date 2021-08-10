@@ -18,6 +18,12 @@ import plotly.io as pio
 from attackcti import attack_client
 
 
+def write_to_disk(filename, json_data):
+    filetimestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    with open(f"{filetimestamp}_{filename}", 'w', encoding='utf-8') as outfile:
+        json.dump(json_data, outfile, indent=4, ensure_ascii=False)
+
+
 def main():
 
     parser = argparse.ArgumentParser(prog="navgen_analytics.py",
@@ -46,14 +52,14 @@ def main():
     bn = json_data.results.values.tolist()
     df_alert = pd.DataFrame(json_data.results.values.tolist())
     df_alert = df_alert.loc[df_alert['type'] == 'CB_ANALYTICS']
- 
+
     df_column_headers = df_alert.columns.tolist()
 
     df_threat_indicators = pd.json_normalize(bn, 'threat_indicators', df_column_headers, record_prefix='threat_indicators_', errors='ignore')
     df_ttps = df_threat_indicators.explode('threat_indicators_ttps').drop(columns=['threat_indicators']).reset_index()
     df_ttps['mitre_technique'] = df_ttps['threat_indicators_ttps'].str.extract(r'(?<=MITRE_)(.*?)(?=\_)')
     df_ttps.head()
-    
+
     lift = attack_client()
     all_techniques = lift.get_techniques()
     all_techniques = lift.remove_revoked(all_techniques)
@@ -77,12 +83,12 @@ def main():
         left_on=["mitre_technique"],
         right_on=["technique_id"],
     )
-    
+
     if args.csv == True:
         mitre_merge_alert_ttp.to_csv(f'{args.project}_alerts.csv')
 
     mitre_merge_alert_ttp.sort_values(by='severity', ascending=False).reset_index(drop=True).head()
-    
+
     mitre_merge_alert_ttp.loc[mitre_merge_alert_ttp['severity'] >= 8].sort_values(by='severity', ascending=False).reset_index(drop=True).head()
 
     mitre_merge_alert_ttp.loc[mitre_merge_alert_ttp['technique'] == "Account Manipulation"].sort_values(by='severity', ascending=False).reset_index(drop=True).head()
@@ -96,7 +102,7 @@ def main():
                 title="CB Analytics Alerts by Severity",
                 labels={"severity": "Severity",
                         "count": "Count"})
-    
+
     fig.write_image(f"{args.project}_bar_cb_analytics_by_severity.png", engine="kaleido")
 
     df_bar = (mitre_merge_alert_ttp['tactic']
@@ -109,7 +115,7 @@ def main():
                 title="CB Analytics Alerts by MITRE ATT&CK Tactic",
                 labels={"tactic": "MITRE ATT&CK Tactic",
                         "count": "Count"})
-    
+
     fig.write_image(f"{args.project}_bar_cb_analytics_by_tactic.png", engine="kaleido")
 
     df_bar = (mitre_merge_alert_ttp['technique']
@@ -122,7 +128,7 @@ def main():
                 title="CB Analytics Alerts by MITRE ATT&CK Technique",
                 labels={"technique": "MITRE ATT&CK Technique",
                         "count": "Count"})
-    
+
     fig.write_image(f"{args.project}_bar_cb_analytics_by_technique.png", engine="kaleido")
 
     df_tactic = (mitre_merge_alert_ttp['tactic']
@@ -133,10 +139,10 @@ def main():
     tactic_count = df_tactic['count'].tolist()
     tactic = df_tactic.index.values.tolist()
 
-    fig = px.line_polar(df_tactic, 
-                        r=tactic_count, 
+    fig = px.line_polar(df_tactic,
+                        r=tactic_count,
                         theta=tactic,
-                        line_close=True, 
+                        line_close=True,
                         title="CB Analytics Alerts by MITRE ATT&CK Tactic")
     fig.update_traces(fill='toself')
     fig.update_layout(
@@ -147,7 +153,7 @@ def main():
     ),
     showlegend=False
     )
-    
+
     fig.write_image(f"{args.project}_radar_cb_analytics_by_tactic.png", engine="kaleido")
 
     columns = [
@@ -210,11 +216,7 @@ def main():
         "showTacticRowBackground": True,
         "tacticRowBackground": "#1d428a"
     }
-
-    filetimestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-
-    with open(f'{filetimestamp}_{args.project}_attack_cb_basic.json', 'w', encoding='utf-8') as outfile:
-        json.dump(platform_layer, outfile, indent=4, ensure_ascii=False)
+    write_to_disk(f"{args.project}_attack_cb_basic.json", platform_layer)
 
     data = df[["tactic","technique_id","device_name"]].reset_index(drop=True).drop_duplicates()
     grouped = data.groupby(['tactic','technique_id'], as_index=False).agg({'device_name': lambda x: x.tolist()})
@@ -227,7 +229,7 @@ def main():
 
     for d in grouped:
         #d['techniqueID'] = d.pop('technique_id')
-        
+
         techniques = {
                 "techniqueID": d.get('technique_id'),
                 "tactic": d.get('tactic'),
@@ -255,7 +257,7 @@ def main():
         "domain": DOMAIN,
         "version": VERSION,
         "filters": {"platforms": ["windows","linux","macOS"]},
-        "sorting": 3,    
+        "sorting": 3,
         "techniques": tl,
         "gradient": {
             "colors": ["#ffffff", "#00C1D5"],
@@ -267,11 +269,7 @@ def main():
         "showTacticRowBackground": True,
         "tacticRowBackground": "#1d428a"
     }
-
-    filetimestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-
-    with open(f'{filetimestamp}_{args.project}_attack_cb_metadata_devices.json', 'w', encoding='utf-8') as outfile:
-        json.dump(platform_layer, outfile, indent=4, ensure_ascii=False)
+    write_to_disk(f"{args.project}_attack_cb_metadata_devices.json", platform_layer)
 
     df_score = (df['technique_id']
             .value_counts()
@@ -287,7 +285,7 @@ def main():
 
     for index, row in df_score.iterrows():
         #d['techniqueID'] = d.pop('technique_id')
-        
+
         techniques = {
                 "techniqueID": row['technique_id'],
                 "score": row['count'],
@@ -309,7 +307,7 @@ def main():
         "domain": DOMAIN,
         "version": VERSION,
         "filters": {"platforms": ["windows","linux","macOS"]},
-        "sorting": 3,    
+        "sorting": 3,
         "techniques": tl,
         "gradient": {
             "colors": ["#ffffff", "#0091da"],
@@ -330,11 +328,7 @@ def main():
         "showTacticRowBackground": True,
         "tacticRowBackground": "#1d428a"
     }
-
-    filetimestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-
-    with open(f'{filetimestamp}_{args.project}_attack_cb_metadata_score.json', 'w', encoding='utf-8') as outfile:
-        json.dump(platform_layer, outfile, indent=4, ensure_ascii=False)
+    write_to_disk(f"{args.project}_attack_cb_metadata_score.json", platform_layer)
 
     data = df[["technique_id","device_name","id"]].reset_index(drop=True).drop_duplicates()
     grouped = data.groupby(['technique_id'], as_index=False).agg({'id': lambda x: x.tolist()})
@@ -343,7 +337,7 @@ def main():
 
     for index, row in grouped.iterrows():
         score.append(len(row['id']))
-        
+
     grouped = grouped.assign(score = score)
 
     grouped['id'] = [',\n\n'.join(map(str, x)) for x in grouped['id']]
@@ -356,7 +350,7 @@ def main():
 
     for index, row in grouped.iterrows():
         #d['techniqueID'] = d.pop('technique_id')
-        
+
         techniques = {
                 "techniqueID": row['technique_id'],
                 "score": row['score'],
@@ -405,11 +399,8 @@ def main():
         "tacticRowBackground": "#1d428a"
     }
 
-    filetimestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    write_to_disk(f'{args.project}_attack_cb_metadata_score_alert_count.json', platform_layer)
 
-    with open(f'{filetimestamp}_{args.project}_attack_cb_metadata_score_alert_count.json', 'w', encoding='utf-8') as outfile:
-        json.dump(platform_layer, outfile, indent=4, ensure_ascii=False)
-        
-        
+
 if __name__ == "__main__":
     sys.exit(main())
