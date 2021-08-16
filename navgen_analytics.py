@@ -188,7 +188,7 @@ def main():
             }
         tl.append(techniques)
 
-    VERSION = "4.1"
+    VERSION = "4.2"
     NAME = "Carbon Black ATT&CK Analytics: Basic Example"
     DESCRIPTION = "CB Analytics/Endpoint Standard"
     DOMAIN = "enterprise-attack"
@@ -245,10 +245,10 @@ def main():
             }
         tl.append(techniques)
 
-    VERSION = "4.1"
+    VERSION = "4.2"
     NAME = "Carbon Black ATT&CK Analytics: Metadata Example"
     DESCRIPTION = "CB Analytics/Endpoint Standard"
-    DOMAIN = "mitre-enterprise"
+    DOMAIN = "enterprise-attack"
     platform_layer = {
         "name": NAME,
         "description": DESCRIPTION,
@@ -299,10 +299,10 @@ def main():
             }
         tl.append(techniques)
 
-    VERSION = "4.1"
+    VERSION = "4.2"
     NAME = "CB Endpoint Standard: Analytic Alerts with Scoring"
     DESCRIPTION = "CB Analytics/Endpoint Standard"
-    DOMAIN = "mitre-enterprise"
+    DOMAIN = "enterprise-attack"
     platform_layer = {
         "name": NAME,
         "description": DESCRIPTION,
@@ -373,10 +373,10 @@ def main():
             }
         tl.append(techniques)
 
-    VERSION = "4.1"
+    VERSION = "4.2"
     NAME = "CB Endpoint Standard: Analytic Alerts with scoring by alert count"
     DESCRIPTION = "CB Analytics/Endpoint Standard"
-    DOMAIN = "mitre-enterprise"
+    DOMAIN = "enterprise-attack"
     platform_layer = {
         "name": NAME,
         "description": DESCRIPTION,
