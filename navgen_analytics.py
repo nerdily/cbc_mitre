@@ -56,16 +56,16 @@ def main():
     
     lift = attack_client()
     all_techniques = lift.get_techniques()
-    all_techniques = lift.remove_revoked(all_techniques)
+    all_techniques = lift.remove_revoked_deprecated(all_techniques)
     len(all_techniques)
 
     all_techniques = lift.get_techniques(stix_format=False)
-    all_techniques = lift.remove_revoked(all_techniques)
+    all_techniques = lift.remove_revoked_deprecated(all_techniques)
 
     # Get all Mitre Techniques
     techniques_df = pd.json_normalize(all_techniques)
     # Drop sub-techniques
-    techniques_df = techniques_df[techniques_df['x_mitre_is_subtechnique']==False]
+    techniques_df = techniques_df[techniques_df['is_subtechnique']==False]
     techniques_df = techniques_df[['matrix','tactic','technique','technique_id']]
 
     # technique_id has a one to many relationship with tactic and the tactic column stores values as a list. This command explodes (flattens) the tactic values so that we are left with a table of all techniques and tactics.

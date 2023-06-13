@@ -14,13 +14,8 @@ This document outlines the configuration steps and procedures to generate the na
 
 - Python 3.8.5+
 - Org Key (Found in the product console under **Settings** > **API Access** > **API Keys**)
-JMcR
-- Install packages needed for the MITRE ATT&CK Navigator
-  - Node.js  (https://nodejs.org/  or https://nodejs.org/dist/v14.17.1/node-v14.17.1-x64.msi)
-  - Angular CLI - 
-- A running instance of the [Mitre ATT&CK Navigator](https://github.com/mitre-attack/attack-navigator#running-the-docker-file) app.
-    - Retrieve https://github.com/mitre-attack/attack-navigator/archive/refs/heads/master.zip
-JMcR
+- Access to the [MITRE ATT&CK Navigator](https://mitre-attack.github.io/attack-navigator/). This is where you'll take your final output and load it to view. 
+
 ### API Access
 
 `cb-attack` requires a single read-only API key.
@@ -62,24 +57,19 @@ JMcR
 
 ### Configure a Python Virtual Environment
 
-The scripts can be run from any system running Python 3.8.5+. The following instructions show how to run the scripts from within a Python Virtual Environment and install the required Python packages.
+The scripts can be run from any system running Python 3.8.5+. The following instructions show how to run the scripts from within a Python Virtual Environment and install the required Python packages. Many IDEs such as [PyCharm](https://www.jetbrains.com/pycharm/) will build the environment for you based on the included requirements.txt file in this repo.
 
 #### **Windows**
 
 ```bash
-JMcR
 (Create a directory to run the tools from)
 mkdir cb-attack
-Copy the requisite files from the CB CSE ATT&CK folder (UCustomerSuccessEngineering/Shared%20Documents/Forms/AllItems.aspx?csf=1&web=1&e=fzub6L%2F&FolderCTID=0x012000ADBF385FB1619043817EE55303472A68&viewid=8c06708a-6d16-4b0a-b312-1c6119d48df2&id=%2Fteams%2FSBUCustomerSuccessEngineering%2FShared%20Documents%2FGeneral%2FSBU%20CSE%20Internal%2FUseful%20Scripts%20and%20Tools%2FCBC%2Fcb-attack) on sharepoint to some temp location (path-to-temp-location)
-JMcR
 pip3 install virtualenv
 cd cb-attack
 virtualenv cb-attack
 cb-attack\Scripts\activate
 
 pip3 install -r <path-to-temp-location>\requirements.txt
-(This will install the packages and dependencies)
-JMcR
 ```
 
 #### **Linux/MacOS**
