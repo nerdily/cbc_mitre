@@ -83,6 +83,11 @@ source bin/activate
 pip3 install -r /path/to/requirements.txt
 ```
 
+## v6 vs v7 Alerts
+We are in a transition period where Carbon Black Cloud is now using the newer v7 Alerts API. The files in this repo marked with `_v7` utilize the new API. 
+
+The older files will remain until the v6 alerts are no longer supported.
+
 ## Download Alert Data
 
 To generate the navigation layers and charts `cb-attack` needs to save alert data to a json file. To save the alert data run `get_alerts.py`. `get_alerts.py` does not use the CBC SDK and instead queries the API directly.
