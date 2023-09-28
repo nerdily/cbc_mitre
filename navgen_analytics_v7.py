@@ -1,8 +1,7 @@
-"""This script extracts Mitre ATT&CK TTPs from CB Endpoint Standard alert v7 data
-and generates sample Mitre ATT&CK Navigation layers
+"""This script extracts MITRE ATT&CK TTPs from CB Endpoint Standard alert v7 data
+and generates sample MITRE ATT&CK Navigation layers
 
 """
-
 import argparse
 import json
 import sys
@@ -16,7 +15,7 @@ from attackcti import attack_client
 
 def main():
     parser = argparse.ArgumentParser(prog="navgen_analytics.py", description="A program that takes CB_ANALYTICS json file written by \
-                                           get_alerts_v7.py as input and generates Mitre ATT&CK navigator layers and Pandas graphs.")
+                                           get_alerts_v7.py as input and generates MITRE ATT&CK navigator layers and Pandas graphs.")
     requiredNamed = parser.add_argument_group('required arguments')
     requiredNamed.add_argument("-f", "--alert_file", required=True, help="The alert data json file written by get_alerts_v7.py")
     requiredNamed.add_argument("-p", "--project", required=False, help="Project Name")
