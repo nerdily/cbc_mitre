@@ -1,5 +1,3 @@
-# !/usr/bin/env python3
-
 """This script extracts Mitre ATT&CK TTPs from CB Endpoint Standard alert v7 data
 and generates sample Mitre ATT&CK Navigation layers
 
@@ -9,7 +7,6 @@ import argparse
 import json
 import sys
 from datetime import datetime
-
 import pandas as pd
 import plotly.express as px
 import plotly.io as pio
@@ -18,20 +15,12 @@ from attackcti import attack_client
 
 
 def main():
-    parser = argparse.ArgumentParser(prog="navgen_analytics.py",
-                                     description="A program that takes \
-                                         CB_ANALYTICS json file written by \
-                                         get_base_alerts.py as input and \
-                                         generates Mitre ATT&CK navigator layers\
-                                         and Pandas graphs.")
-    parser.add_argument("-f", "--alert_file", required=True,
-                        help="The alert data json file written by \
-                              get_base_alerts.py")
-    parser.add_argument("-p", "--project", required=False,
-                        help="Project Name")
-    parser.add_argument("-c", "--csv", action='store_true',
-                        help="Export the enriched alert data to a csv file")
-
+    parser = argparse.ArgumentParser(prog="navgen_analytics.py", description="A program that takes CB_ANALYTICS json file written by \
+                                           get_alerts_v7.py as input and generates Mitre ATT&CK navigator layers and Pandas graphs.")
+    requiredNamed = parser.add_argument_group('required arguments')
+    requiredNamed.add_argument("-f", "--alert_file", required=True, help="The alert data json file written by get_alerts_v7.py")
+    requiredNamed.add_argument("-p", "--project", required=False, help="Project Name")
+    parser.add_argument("-c", "--csv", action='store_true', help="Export the enriched alert data to a csv file")
     args = parser.parse_args()
 
     pd.set_option('display.max_rows', None)
@@ -84,14 +73,8 @@ def main():
         mitre_merge_alert_ttp.to_csv(f'{args.project}_alerts.csv')
 
     mitre_merge_alert_ttp.sort_values(by='severity', ascending=False).reset_index(drop=True).head()
-
-    mitre_merge_alert_ttp.loc[mitre_merge_alert_ttp['severity'] >= 8].sort_values(by='severity',
-                                                                                  ascending=False).reset_index(
-        drop=True).head()
-
-    mitre_merge_alert_ttp.loc[mitre_merge_alert_ttp['technique'] == "Account Manipulation"].sort_values(by='severity',
-                                                                                                        ascending=False).reset_index(
-        drop=True).head()
+    mitre_merge_alert_ttp.loc[mitre_merge_alert_ttp['severity'] >= 8].sort_values(by='severity', ascending=False).reset_index(drop=True).head()
+    mitre_merge_alert_ttp.loc[mitre_merge_alert_ttp['technique'] == "Account Manipulation"].sort_values(by='severity', ascending=False).reset_index(drop=True).head()
 
     df_bar = (mitre_merge_alert_ttp['severity']
               .value_counts()
