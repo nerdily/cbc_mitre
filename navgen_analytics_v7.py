@@ -9,7 +9,6 @@ from datetime import datetime
 import pandas as pd
 import plotly.express as px
 import plotly.io as pio
-
 from attackcti import attack_client
 
 
@@ -22,10 +21,6 @@ def main():
     parser.add_argument("-c", "--csv", action='store_true', help="Export the enriched alert data to a csv file")
     args = parser.parse_args()
 
-    pd.set_option('display.max_rows', None)
-    pd.set_option('display.max_columns', None)
-    pd.set_option('display.width', None)
-    pd.set_option('display.max_colwidth', None)
     pio.templates.default = "seaborn"
 
     raw_alert_data = pd.read_json(args.alert_file)  # Ingest the alerts file
