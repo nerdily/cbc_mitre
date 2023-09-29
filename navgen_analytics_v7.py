@@ -13,7 +13,7 @@ from attackcti import attack_client
 
 
 def main():
-    parser = argparse.ArgumentParser(prog="navgen_analytics.py", description="A program that takes CB_ANALYTICS json file written by \
+    parser = argparse.ArgumentParser(prog="navgen_analytics_v7.py", description="A program that takes CB_ANALYTICS json file written by \
                                            get_alerts_v7.py as input and generates MITRE ATT&CK navigator layers and Pandas graphs.")
     requiredNamed = parser.add_argument_group('required arguments')
     requiredNamed.add_argument("-f", "--alert_file", required=True, help="The alert data json file written by get_alerts_v7.py")
