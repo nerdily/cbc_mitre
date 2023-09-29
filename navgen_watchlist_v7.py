@@ -11,7 +11,7 @@ import plotly.io as pio
 
 
 def main():
-    parser = argparse.ArgumentParser(prog="navgen_watchlist.py", description="A program that takes WATCHLIST json file \
+    parser = argparse.ArgumentParser(prog="navgen_watchlist_v7.py", description="A program that takes WATCHLIST json file \
                                            written by get_alerts_v7.py as input and generates MITRE ATT&CK navigator layers and Pandas graphs.")
     requiredNamed = parser.add_argument_group('required arguments')
     requiredNamed.add_argument("-f", "--alert_file", required=True,
