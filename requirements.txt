@@ -4,7 +4,7 @@ attrs==23.1.0
 boto3==1.28.56
 botocore==1.31.56
 carbon-black-cloud-sdk==1.4.3
-certifi==2023.7.22
+certifi==2024.7.4
 charset-normalizer==3.2.0
 contextlib2==21.6.0
 decorator==5.1.1
